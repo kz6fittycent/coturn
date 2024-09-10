@@ -1,0 +1,65 @@
+name: coturn
+adopt-info: coturn
+summary: coturn is a free open source implementation of TURN and STUN Server.
+description: |
+  coturn is a free open source implementation of TURN and STUN Server. 
+  The TURN Server is a VoIP media traffic NAT traversal server and gateway.
+    
+license: Proprietary
+issues: https://github.com/kz6fittycent/coturn
+contact: https://github.com/kz6fittycent/coturn
+source-code: https://github.com/coturn/coturn
+
+base: core24
+grade: stable 
+confinement: strict
+
+platforms:
+  amd64:
+    build-on: [amd64]
+    build-for: [amd64]
+  arm64:
+    build-on: [arm64]
+    build-for: [arm64]
+  ppc64el:
+    build-on: [ppc64el]
+    build-for: [ppc64el]
+  s390x:
+    build-on: [s390x]
+    build-for: [s390x]
+    
+apps:
+  coturn:
+    command: bin/turnserver
+    daemon: simple
+    restart-condition: always    
+    plugs:
+      - network
+      - network-bind
+
+parts:
+  coturn:
+    source: https://github.com/coturn/coturn
+    source-type: git
+    plugin: cmake
+    
+    build-packages:
+      - libevent-dev
+      - libssl-dev
+      - libpq-dev
+      - libsqlite3-dev
+      - libhiredis-dev
+      - libmongoc-dev
+      - libmicrohttpd-dev
+    stage-packages:
+      - libevent-core-2.1-7t64
+      - libevent-extra-2.1-7t64
+      - libevent-openssl-2.1-7t64
+      - libevent-pthreads-2.1-7t64
+      - libldap2
+      - libpq5
+      - libsasl2-2  
+      
+    override-pull: |
+      craftctl default
+      craftctl set version="$(git describe --tags | sed 's/^v//' | cut -d "-" -f1 | cut -d "/" -f2)" 
