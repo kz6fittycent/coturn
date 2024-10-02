@@ -18,19 +18,10 @@ platforms:
   amd64:
     build-on: [amd64]
     build-for: [amd64]
-  arm64:
-    build-on: [arm64]
-    build-for: [arm64]
-  ppc64el:
-    build-on: [ppc64el]
-    build-for: [ppc64el]
-  s390x:
-    build-on: [s390x]
-    build-for: [s390x]
     
 apps:
   coturn:
-    command: bin/turnserver
+    command: usr/local/bin/turnserver
     daemon: simple
     restart-condition: always    
     plugs:
@@ -41,8 +32,8 @@ parts:
   coturn:
     source: https://github.com/coturn/coturn
     source-type: git
-    plugin: cmake
-    
+    plugin: make
+
     build-packages:
       - libevent-dev
       - libssl-dev
@@ -51,6 +42,8 @@ parts:
       - libhiredis-dev
       - libmongoc-dev
       - libmicrohttpd-dev
+      - pkg-config
+      
     stage-packages:
       - libevent-core-2.1-7t64
       - libevent-extra-2.1-7t64
@@ -58,8 +51,8 @@ parts:
       - libevent-pthreads-2.1-7t64
       - libldap2
       - libpq5
-      - libsasl2-2  
-      
+      - libsasl2-2        
+     
     override-pull: |
       craftctl default
       craftctl set version="$(git describe --tags | sed 's/^v//' | cut -d "-" -f1 | cut -d "/" -f2)" 
