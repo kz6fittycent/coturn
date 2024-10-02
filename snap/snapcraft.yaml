@@ -21,7 +21,7 @@ platforms:
     
 apps:
   coturn:
-    command: bin/turnserver
+    command: usr/bin/turnserver
     daemon: simple
     restart-condition: always    
     plugs:
@@ -33,6 +33,8 @@ parts:
     source: https://github.com/coturn/coturn
     source-type: git
     plugin: cmake
+    cmake-parameters:
+      - -DCMAKE_INSTALL_PREFIX=/usr   
 
     build-packages:
       - libevent-dev
