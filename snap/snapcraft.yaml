@@ -21,7 +21,7 @@ platforms:
     
 apps:
   coturn:
-    command: usr/local/bin/turnserver
+    command: bin/turnserver
     daemon: simple
     restart-condition: always    
     plugs:
